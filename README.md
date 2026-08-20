@@ -202,6 +202,7 @@ npm run build
 | `specsfy-kit sync` | recalcula branch/worktree e reconcilia assets |
 | `specsfy-kit status [--json]` | mostra resolução, instalação e drift |
 | `specsfy-kit doctor [--json]` | verifica pré-requisitos; não instala |
+| `specsfy-kit test` | detecta e executa Maven, Gradle e scripts Node |
 | `specsfy-kit update` | atualiza assets oficiais e do kit |
 | `specsfy-kit profiles list` | lista profiles |
 | `specsfy-kit profiles show <nome>` | detalha intenção e specialists |
@@ -209,6 +210,37 @@ npm run build
 Operações mutáveis aceitam `--dry-run`; `init`, `sync` e `update` aceitam
 `--force` para assets kit-owned alterados. `init`, `sync` e `update` aceitam
 `--profile` repetível. Use `--json` em automação.
+
+## Testes nativos da stack
+
+O Specsfy oficial 0.8.1 limita `specsfy test` a projetos Laravel com Pest. O
+kit não altera esse comando e oferece um runner complementar:
+
+```bash
+specsfy-kit test
+specsfy-kit test --dry-run
+specsfy-kit test --verify
+specsfy-kit test --json
+specsfy-kit test --runner maven
+specsfy-kit test -- --tests UserServiceTest
+```
+
+A resolução prioriza `mvnw`/`mvnw.cmd` e `gradlew`/`gradlew.bat`; na ausência
+do wrapper usa Maven ou Gradle do `PATH`. Projetos Node usam o script `test` e
+o gerenciador declarado em `packageManager` ou indicado pelo lockfile. npm é o
+fallback. No modo `--verify`, Maven executa `verify`, Gradle executa `check` e
+scripts Node continuam executando `test`.
+
+Em monorepos, um POM agregador, um build com `settings.gradle` ou um workspace
+Node com script `test` possui seus módulos, evitando duplicação. Runners
+independentes — por exemplo backend Maven e frontend npm — são executados em
+sequência. Todos são executados e qualquer exit code diferente de zero faz o
+comando terminar com falha.
+
+`--dry-run` apenas mostra comandos e diretórios. `--json` captura stdout e
+stderr dos runners e emite um único documento. Argumentos específicos devem
+ser colocados após `--`; eles são repassados como argumentos separados, sem
+interpolação por shell.
 
 ## Profiles
 
@@ -410,6 +442,8 @@ specsfy-kit detect --json
 specsfy-kit init --profile serverless-node --yes --dry-run --json
 specsfy-kit sync --dry-run --json
 specsfy-kit doctor --json
+specsfy-kit test --dry-run --json
+specsfy-kit test --json
 ```
 
 `--dry-run` não grava configuração/runtime/lock, não instala skills e não chama
@@ -449,6 +483,10 @@ specsfy-kit init --profile java-modernization --profile vue-quasar --yes
   customização ou repita com `--force`.
 - catálogo indisponível: satisfaça a autenticação/rede exigida pelo Specsfy.
 - `runtimeStale: true`: execute `specsfy-kit sync` após checkout.
+- `nenhum runner de teste suportado`: adicione um script `test` ao
+  `package.json` ou use um projeto Maven/Gradle; runners custom devem ser
+  executados diretamente.
+- `specsfy test` espera Pest: em stacks Java/Node use `specsfy-kit test`.
 - versão `unknown`: declare a intenção pelo profile; não invente uma versão.
 
 ## Desinstalação
@@ -477,6 +515,7 @@ src/
 ├── ownership/      fingerprints kit-owned
 ├── profiles/       definições e resolução
 ├── specialists/    instalação externa
+├── testing/        detecção e execução de runners nativos
 └── specsfy/        SpecsfyAdapter
 specialists/        11 Agent Skills distribuídas
 profiles/           catálogo legível
@@ -496,6 +535,7 @@ docs/adr/           decisões arquiteturais
 - Templates customizados não são criados pelo kit; a extensão oficial já está
   preparada em `.specsfy/templates/custom/`.
 - Não há hooks, daemon, telemetry, servidor ou atualização em background.
+- Runners customizados fora de Maven, Gradle e scripts Node não são inferidos.
 
 ## ADRs
 

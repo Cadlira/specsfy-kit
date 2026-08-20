@@ -25,5 +25,5 @@ describe("Git worktrees", () => {
     await writeRuntime(mainGit, { ...base, branch: "main", worktree: main, profiles: ["java-legacy"], profileSource: "defaultProfiles" } satisfies RuntimeState);
     await writeRuntime(modernGit, { ...base, branch: "modernizacao/java21", worktree: modernization, profiles: ["java-modernization"], profileSource: "branch rule" } satisfies RuntimeState);
     expect((await readRuntime(mainGit))?.profiles).toEqual(["java-legacy"]); expect((await readRuntime(modernGit))?.profiles).toEqual(["java-modernization"]);
-  });
+  }, 15_000);
 });

@@ -122,6 +122,13 @@ versionado a cada checkout.
   saída pública do CLI, reduzindo acoplamento.
 - A detecção Maven não é um effective-POM completo. Propriedades locais são
   resolvidas; herança remota ou expressions complexas resultam em `unknown`.
+- Em validação real com o Specsfy 0.8.1, `specsfy test` recusou um projeto
+  Java/Maven e informou que esperava Laravel com Pest. A inspeção do pacote
+  instalado confirmou que `detectProjectTestCommand` exige `artisan` e
+  `pestphp/pest` e não expõe configuração de runner. O kit preserva o comando
+  oficial e oferece `specsfy-kit test`, que detecta wrappers Maven/Gradle e
+  scripts Node, incluindo agregação segura em monorepos. Essa execução não
+  passa pelo `SpecsfyAdapter`, pois não existe contrato oficial aplicável.
 - Instalar/atualizar specialists oficiais requer os mesmos acessos de rede e
   autenticação exigidos pelo Specsfy.
 - Novas mudanças incompatíveis no CLI oficial devem ser absorvidas somente no

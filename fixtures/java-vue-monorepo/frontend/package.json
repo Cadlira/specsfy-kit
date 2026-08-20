@@ -1,1 +1,1 @@
-{"name":"frontend","private":true,"workspaces":[],"dependencies":{"vue":"3.5.13","quasar":"2.17.5"},"devDependencies":{"typescript":"5.7.2"}}
+{"name":"frontend","private":true,"workspaces":[],"scripts":{"test":"node --test"},"dependencies":{"vue":"3.5.13","quasar":"2.17.5"},"devDependencies":{"typescript":"5.7.2"}}

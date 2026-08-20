@@ -8,6 +8,7 @@ import { initProject, projectStatus, syncProject, updateProject } from "../core/
 import { VERSION } from "../core/version.js";
 import { PROFILE_DEFINITIONS, PROFILES } from "../profiles/definitions.js";
 import { resolveSpecialists, suggestProfiles, validateProfiles } from "../profiles/resolver.js";
+import { detectTestPlan, executeTestPlan } from "../testing/runner.js";
 import { printJson, printRuntime, stackLines } from "./output.js";
 const collect = (value, previous) => [...previous, value];
 const projectOption = () => new Option("--project <path>", "raiz do projeto").default(".");
@@ -101,6 +102,39 @@ program.command("doctor").description("verifica pré-requisitos sem instalar nad
         for (const check of checks)
             console.log(`${check.ok ? "OK" : "FAIL"} ${check.name}: ${check.detail}`);
     if (checks.some(({ ok }) => !ok))
+        process.exitCode = 1;
+});
+program.command("test")
+    .description("detecta e executa os testes nativos da stack")
+    .addOption(projectOption())
+    .option("--verify", "executa Maven verify ou Gradle check")
+    .option("--runner <kind>", "limita a maven, gradle, npm, pnpm, yarn ou bun", collect, [])
+    .option("--dry-run", "mostra o plano sem executar testes")
+    .option("--json", "saída JSON estável; captura a saída dos runners")
+    .argument("[runnerArgs...]", "argumentos repassados após -- ao runner")
+    .action(async (runnerArgs, options) => {
+    const allowed = new Set(["maven", "gradle", "npm", "pnpm", "yarn", "bun"]);
+    const kinds = options.runner?.map((kind) => {
+        if (!allowed.has(kind))
+            throw new Error(`runner desconhecido: ${kind}`);
+        return kind;
+    });
+    const plan = await detectTestPlan(resolve(options.project), { verify: options.verify ?? false, runnerArgs, kinds: kinds ?? [] });
+    if (!plan.runners.length)
+        throw new Error(plan.warnings.at(-1) ?? "nenhum runner de teste suportado foi detectado");
+    if (!options.json) {
+        console.log(`Test plan: ${plan.runners.length} runner(s), mode ${plan.mode}`);
+        for (const runner of plan.runners)
+            console.log(`  ${runner.label} [${runner.source}]\n    ${runner.display}`);
+    }
+    const result = await executeTestPlan(plan, { dryRun: options.dryRun ?? false, captureOnly: options.json ?? false });
+    if (options.json)
+        printJson(result);
+    else if (!options.dryRun) {
+        for (const item of result.results)
+            console.log(`${item.exitCode === 0 ? "PASS" : "FAIL"} ${item.runner.id} (${Math.round(item.durationMs)} ms)`);
+    }
+    if (!result.ok)
         process.exitCode = 1;
 });
 program.command("update").description("atualiza assets oficiais e extensões do kit").addOption(projectOption()).addOption(profileOption()).option("--dry-run", "planeja sem escrever").option("--json", "saída JSON estável").option("--force", "substitui assets gerenciados alterados").option("--upgrade-specsfy", "atualiza explicitamente o CLI global oficial").action(async (options) => {
