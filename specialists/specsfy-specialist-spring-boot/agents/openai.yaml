@@ -1,0 +1,4 @@
+interface:
+  display_name: "Specsfy Kit · Spring Boot"
+  short_description: "Spring Boot comprovado"
+  default_prompt: "Use $specsfy-specialist-spring-boot para orientar esta tarefa Boot."

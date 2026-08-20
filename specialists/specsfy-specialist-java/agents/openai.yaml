@@ -1,0 +1,4 @@
+interface:
+  display_name: "Specsfy Kit · Java"
+  short_description: "Java compatível com o projeto"
+  default_prompt: "Use $specsfy-specialist-java para orientar esta tarefa Java."

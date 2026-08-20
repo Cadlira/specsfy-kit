@@ -1,0 +1,13 @@
+node_modules/
+.gradle/
+build/
+coverage/
+*.tgz
+.npm-cache/
+.tmp-install/
+.tmp-source-install/
+.tmp-final-install/
+.tmp-final2-install/
+.tmp-final3-install/
+.tmp-consumer/
+.specsfy-kit.runtime.json

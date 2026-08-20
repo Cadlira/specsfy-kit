@@ -1,0 +1,4 @@
+interface:
+  display_name: "Specsfy Kit · Hibernate"
+  short_description: "Hibernate conforme a versão"
+  default_prompt: "Use $specsfy-specialist-hibernate para orientar esta tarefa de persistência."

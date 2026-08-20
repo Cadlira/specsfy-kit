@@ -1,0 +1,4 @@
+interface:
+  display_name: "Specsfy Kit · Testes Java"
+  short_description: "Testes Java pragmáticos"
+  default_prompt: "Use $specsfy-specialist-java-testing para orientar os testes desta tarefa."

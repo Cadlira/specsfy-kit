@@ -1,0 +1,10 @@
+schemaVersion: 1
+defaultProfiles: [java-legacy]
+branchProfiles:
+  - pattern: modernizacao/**
+    replace: [java-modernization]
+  - pattern: frontend/**
+    add: [vue-quasar]
+overrides:
+  addSpecialists: []
+  removeSpecialists: []

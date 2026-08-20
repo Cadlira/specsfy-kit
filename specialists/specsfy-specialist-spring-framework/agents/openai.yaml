@@ -1,0 +1,4 @@
+interface:
+  display_name: "Specsfy Kit · Spring Framework"
+  short_description: "Spring sem presumir Boot"
+  default_prompt: "Use $specsfy-specialist-spring-framework para orientar esta tarefa Spring."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Specsfy Kit · Vue"
+  short_description: "Vue conforme a versão"
+  default_prompt: "Use $specsfy-specialist-vue para orientar esta tarefa Vue."

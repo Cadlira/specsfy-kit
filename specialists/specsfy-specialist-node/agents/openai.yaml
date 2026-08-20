@@ -1,0 +1,4 @@
+interface:
+  display_name: "Specsfy Kit · Node.js"
+  short_description: "Node compatível com o runtime"
+  default_prompt: "Use $specsfy-specialist-node para orientar esta tarefa Node.js."

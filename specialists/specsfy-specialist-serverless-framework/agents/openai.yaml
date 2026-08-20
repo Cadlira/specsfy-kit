@@ -1,0 +1,4 @@
+interface:
+  display_name: "Specsfy Kit · Serverless"
+  short_description: "Serverless Framework seguro"
+  default_prompt: "Use $specsfy-specialist-serverless-framework para orientar esta tarefa Serverless."

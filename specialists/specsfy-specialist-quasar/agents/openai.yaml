@@ -1,0 +1,4 @@
+interface:
+  display_name: "Specsfy Kit · Quasar"
+  short_description: "Quasar conforme o projeto"
+  default_prompt: "Use $specsfy-specialist-quasar para orientar esta tarefa Quasar."

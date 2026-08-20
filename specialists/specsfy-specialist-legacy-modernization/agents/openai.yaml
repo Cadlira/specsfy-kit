@@ -1,0 +1,4 @@
+interface:
+  display_name: "Specsfy Kit · Legado"
+  short_description: "Modernização incremental segura"
+  default_prompt: "Use $specsfy-specialist-legacy-modernization conforme o profile ativo."

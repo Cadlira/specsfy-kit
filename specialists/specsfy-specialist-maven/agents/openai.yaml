@@ -1,0 +1,4 @@
+interface:
+  display_name: "Specsfy Kit · Maven"
+  short_description: "Build Maven seguro"
+  default_prompt: "Use $specsfy-specialist-maven para orientar esta mudança Maven."

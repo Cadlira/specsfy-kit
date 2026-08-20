@@ -1,0 +1,54 @@
+{
+  "name": "specsfy-kit",
+  "version": "0.1.0",
+  "description": "Profiles, detecção de stack e specialists externos para o Specsfy oficial.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "specsfy-kit": "dist/cli/main.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "scripts",
+    "specialists",
+    "profiles",
+    "docs",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node scripts/clean.mjs && tsc -p tsconfig.build.json && node scripts/postbuild.mjs",
+    "prepare": "node scripts/prepare.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "check": "npm test && npm run lint && npm run typecheck && npm run build && npm pack --dry-run"
+  },
+  "engines": {
+    "node": ">=22.20.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cadlira/specsfy-kit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Cadlira/specsfy-kit/issues"
+  },
+  "homepage": "https://github.com/Cadlira/specsfy-kit#readme",
+  "dependencies": {
+    "commander": "^14.0.2",
+    "minimatch": "^10.1.1",
+    "yaml": "^2.8.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@types/node": "^24.10.1",
+    "eslint": "^9.39.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.54.0",
+    "vitest": "^4.0.18"
+  }
+}

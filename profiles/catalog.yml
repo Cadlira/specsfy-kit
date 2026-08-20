@@ -1,0 +1,17 @@
+schemaVersion: 1
+profiles:
+  - name: java-legacy
+    intent: manutenção conservadora
+    conflicts: [java-modernization]
+  - name: java-modernization
+    intent: modernização incremental autorizada por spec
+    conflicts: [java-legacy]
+  - name: spring-boot-service
+    intent: evolução de serviço Spring Boot existente
+  - name: vue-quasar
+    intent: evolução de frontend Vue e Quasar existente
+  - name: serverless-node
+    intent: evolução de serviço Node no Serverless Framework
+
+# A fonte executável é src/profiles/definitions.ts. Este catálogo é a visão
+# distribuída, legível por pessoas, validada por testes de consistência.

@@ -1,0 +1,7 @@
+service: fixture
+provider:
+  name: aws
+  runtime: nodejs22.x
+functions:
+  hello:
+    handler: src/handler.hello
