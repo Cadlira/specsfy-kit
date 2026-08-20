@@ -10,7 +10,7 @@ Execute o fluxo recomendado:
 
 ```bash
 npm install --global @promovaweb/specsfy
-npm install --global github:Cadlira/specsfy-kit
+npm install --global https://github.com/Cadlira/specsfy-kit/archive/refs/heads/main.tar.gz
 
 cd meu-projeto
 specsfy-kit init
@@ -19,14 +19,10 @@ specsfy-kit init
 > **Não execute `specsfy setup` manualmente antes de `specsfy-kit init`.** O
 > kit resolve o profile primeiro e então orquestra o setup oficial.
 
-No Windows com NVM for Windows, o npm 10 pode emitir `TAR_ENTRY_ERROR` ao
-instalar pelo atalho `github:` e deixar uma árvore incompleta. Não atualize o
-npm separadamente por causa disso. Use a distribuição equivalente por tarball,
-validada com Node.js 22.22.2 e npm 10.9.7:
-
-```bash
-npm install --global https://github.com/Cadlira/specsfy-kit/archive/refs/heads/main.tar.gz
-```
+O tarball é o único método de instalação recomendado. No Windows com NVM for
+Windows, o npm 10 pode retornar sucesso ao instalar por `github:` enquanto
+deixa uma junction apontando para um clone temporário já removido. O tarball
+materializa o pacote e foi validado com Node.js 22.22.2 e npm 10.9.7.
 
 ## O problema resolvido
 
@@ -85,22 +81,7 @@ O upgrade global nunca é executado silenciosamente pelo kit.
 
 ## Instalação do specsfy-kit
 
-Instalação recomendada diretamente do repositório GitHub:
-
-```bash
-npm install --global github:Cadlira/specsfy-kit
-specsfy-kit --version
-```
-
-Forma Git equivalente:
-
-```bash
-npm install --global git+https://github.com/Cadlira/specsfy-kit.git
-```
-
-Se o npm 10 no Windows/NVM apresentar `TAR_ENTRY_ERROR`, use o tarball da mesma
-branch. Esse caminho evita a extração do clone Git feita pelo npm e não exige
-trocar o Node.js nem atualizar o npm:
+Instalação recomendada pelo tarball HTTPS da branch `main`:
 
 ```bash
 npm install --global https://github.com/Cadlira/specsfy-kit/archive/refs/heads/main.tar.gz
@@ -108,11 +89,11 @@ specsfy-kit --version
 specsfy-kit profiles list
 ```
 
-O `dist/` é versionado para que a instalação Git global não dependa de
-`devDependencies` nem execute lifecycle durante o clone. Mesmo sem lifecycle,
-npm 10.9.7 no Windows apresentou `TAR_ENTRY_ERROR` e deixou a instalação
-incompleta pelo atalho `github:`. A instalação do tarball com Node.js 22.22.2 e
-npm 10.9.7 foi validada com todos os 11 specialists. Antes de cada commit de
+O `dist/` é versionado para que a instalação global pelo tarball não dependa de
+`devDependencies` nem execute lifecycle no ambiente consumidor. O npm 10.9.7
+no Windows pode deixar a instalação `github:` ligada a um clone temporário e
+retornar exit code 0; por isso esse formato não deve ser usado. A instalação
+por tarball foi validada com todos os 11 specialists. Antes de cada commit de
 release, `npm run build` deve atualizar o binário `dist/cli/main.js`; `npm run
 check` valida código, testes e pacote.
 
@@ -120,7 +101,7 @@ Uma versão pinada poderá ser instalada quando existir uma tag:
 
 ```bash
 # Exemplo futuro; requer a tag correspondente no repositório.
-npm install --global github:Cadlira/specsfy-kit#v0.1.1
+npm install --global https://github.com/Cadlira/specsfy-kit/archive/refs/tags/v0.1.2.tar.gz
 ```
 
 ## Configuração do zero em um projeto
@@ -136,11 +117,8 @@ npm install --global @promovaweb/specsfy
 specsfy --version
 
 # 3. instalar o kit
-npm install --global github:Cadlira/specsfy-kit
+npm install --global https://github.com/Cadlira/specsfy-kit/archive/refs/heads/main.tar.gz
 specsfy-kit --version
-
-# Se houver TAR_ENTRY_ERROR no Windows/NVM, substituir o comando anterior por:
-# npm install --global https://github.com/Cadlira/specsfy-kit/archive/refs/heads/main.tar.gz
 
 # 4. entrar no projeto
 cd caminho/do/projeto
@@ -444,7 +422,7 @@ specsfy-kit update --upgrade-specsfy
 ### Atualizar o specsfy-kit
 
 ```bash
-npm install --global github:Cadlira/specsfy-kit
+npm install --global https://github.com/Cadlira/specsfy-kit/archive/refs/heads/main.tar.gz --force
 cd caminho/do/projeto
 specsfy-kit update
 specsfy-kit status
@@ -555,4 +533,4 @@ docs/adr/           decisões arquiteturais
 ## ADRs
 
 As decisões de não-fork, ordem do setup, intenção, ownership, config/lock,
-branches, worktrees, sync e distribuição GitHub estão em [docs/adr](docs/adr/).
+branches, worktrees, sync e distribuição por tarball HTTPS estão em [docs/adr](docs/adr/).
