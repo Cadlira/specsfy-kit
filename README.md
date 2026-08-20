@@ -6,6 +6,8 @@ não substitui a metodologia SDD, os gates, as base skills ou o CLI oficial.
 
 ## Quick start
 
+Execute o fluxo recomendado:
+
 ```bash
 npm install --global @promovaweb/specsfy
 npm install --global github:Cadlira/specsfy-kit
@@ -16,6 +18,15 @@ specsfy-kit init
 
 > **Não execute `specsfy setup` manualmente antes de `specsfy-kit init`.** O
 > kit resolve o profile primeiro e então orquestra o setup oficial.
+
+No Windows com NVM for Windows, o npm 10 pode emitir `TAR_ENTRY_ERROR` ao
+instalar pelo atalho `github:` e deixar uma árvore incompleta. Não atualize o
+npm separadamente por causa disso. Use a distribuição equivalente por tarball,
+validada com Node.js 22.22.2 e npm 10.9.7:
+
+```bash
+npm install --global https://github.com/Cadlira/specsfy-kit/archive/refs/heads/main.tar.gz
+```
 
 ## O problema resolvido
 
@@ -41,7 +52,7 @@ flowchart TD
 Conforme o Specsfy oficial 0.8.1 consultado em 20/08/2026:
 
 - Node.js 22.20.0 ou superior;
-- npm;
+- o npm fornecido com a instalação ativa do Node.js;
 - Git;
 - acesso de escrita ao projeto;
 - requisitos de rede/autenticação exigidos pelo Specsfy para obter o catálogo.
@@ -87,11 +98,23 @@ Forma Git equivalente:
 npm install --global git+https://github.com/Cadlira/specsfy-kit.git
 ```
 
+Se o npm 10 no Windows/NVM apresentar `TAR_ENTRY_ERROR`, use o tarball da mesma
+branch. Esse caminho evita a extração do clone Git feita pelo npm e não exige
+trocar o Node.js nem atualizar o npm:
+
+```bash
+npm install --global https://github.com/Cadlira/specsfy-kit/archive/refs/heads/main.tar.gz
+specsfy-kit --version
+specsfy-kit profiles list
+```
+
 O `dist/` é versionado para que a instalação Git global não dependa de
-`devDependencies` nem execute lifecycle durante o clone. Isso evita uma falha do
-npm 10 no Windows que corrompe a extração ao executar `prepare` em dependências
-Git globais. Antes de cada commit de release, `npm run build` deve atualizar o
-binário `dist/cli/main.js`; `npm run check` valida código, testes e pacote.
+`devDependencies` nem execute lifecycle durante o clone. Mesmo sem lifecycle,
+npm 10.9.7 no Windows apresentou `TAR_ENTRY_ERROR` e deixou a instalação
+incompleta pelo atalho `github:`. A instalação do tarball com Node.js 22.22.2 e
+npm 10.9.7 foi validada com todos os 11 specialists. Antes de cada commit de
+release, `npm run build` deve atualizar o binário `dist/cli/main.js`; `npm run
+check` valida código, testes e pacote.
 
 Uma versão pinada poderá ser instalada quando existir uma tag:
 
@@ -115,6 +138,9 @@ specsfy --version
 # 3. instalar o kit
 npm install --global github:Cadlira/specsfy-kit
 specsfy-kit --version
+
+# Se houver TAR_ENTRY_ERROR no Windows/NVM, substituir o comando anterior por:
+# npm install --global https://github.com/Cadlira/specsfy-kit/archive/refs/heads/main.tar.gz
 
 # 4. entrar no projeto
 cd caminho/do/projeto
