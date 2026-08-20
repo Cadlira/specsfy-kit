@@ -6,13 +6,15 @@ Aceita.
 
 ## Decisão
 
-Distribuir inicialmente pelo repositório GitHub. `prepare` compila TypeScript
-quando o compilador está disponível e, no `npm install --global` que não instala
-`devDependencies` no clone Git, valida e utiliza o `dist/` versionado. `bin`
-aponta para JS ESM com shebang e `files` inclui assets necessários.
+Distribuir inicialmente pelo repositório GitHub com `dist/` versionado. Não usar
+`prepare` ou outro lifecycle durante a instalação: npm 10 no Windows pode
+corromper a extração de uma dependência Git global ao executar a instalação
+aninhada necessária ao lifecycle. `bin` aponta para JS ESM com shebang e `files`
+inclui os assets necessários.
 
 ## Consequências
 
 `npm install --global github:Cadlira/specsfy-kit` funciona sem publicação no
-registry. O build versionado deve ser atualizado e verificado antes de cada
-commit de release. Instalações pinadas dependerão de tags futuras.
+registry. `npm run check` e `npm run build` devem ser executados antes do commit
+para manter o build versionado sincronizado. Instalações pinadas dependerão de
+tags futuras.

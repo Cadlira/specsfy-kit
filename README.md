@@ -87,12 +87,11 @@ Forma Git equivalente:
 npm install --global git+https://github.com/Cadlira/specsfy-kit.git
 ```
 
-O lifecycle `prepare` recompila TypeScript quando as dependências de
-desenvolvimento estão disponíveis. Em instalações Git globais nas quais o npm
-não expõe `devDependencies` ao clone, ele valida e utiliza o `dist/` versionado.
-O binário aponta para `dist/cli/main.js`, com shebang e assets incluídos. A
-instalação local equivalente foi validada com pacote gerado por `npm pack` e
-prefixo npm temporário, sem publicar nada.
+O `dist/` é versionado para que a instalação Git global não dependa de
+`devDependencies` nem execute lifecycle durante o clone. Isso evita uma falha do
+npm 10 no Windows que corrompe a extração ao executar `prepare` em dependências
+Git globais. Antes de cada commit de release, `npm run build` deve atualizar o
+binário `dist/cli/main.js`; `npm run check` valida código, testes e pacote.
 
 Uma versão pinada poderá ser instalada quando existir uma tag:
 
