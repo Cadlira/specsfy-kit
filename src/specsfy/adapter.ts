@@ -64,21 +64,24 @@ export class SpecsfyAdapter {
     this.runner = options.runner ?? defaultRunner;
   }
 
-  buildArgs(operation: "version" | "doctor" | "setup" | "update" | "upgrade" | "skills-list" | "skills-detect" | "skills-add", project: string, names: string[] = [], force = false): string[] {
+  buildArgs(operation: "version" | "doctor" | "setup" | "update" | "upgrade" | "progress" | "skills-list" | "skills-detect" | "skills-add", project: string, names: string[] = [], force = false): string[] {
     switch (operation) {
       case "version": return ["--version"];
       case "doctor": return ["doctor", "--project", project, "--json"];
       case "setup": return ["setup", "--project", project, ...(force ? ["--force"] : [])];
       case "update": return ["update", "--project", project, ...(force ? ["--force"] : []), "--json"];
       case "upgrade": return ["upgrade", "--json"];
+      case "progress": return ["progress", "--project", project];
       case "skills-list": return ["skills", "list", "--json"];
       case "skills-detect": return ["skills", "detect", "--project", project, "--json"];
       case "skills-add": return ["skills", "add", ...names, "--project", project, ...(force ? ["--force"] : [])];
     }
   }
 
-  async run(operation: Parameters<SpecsfyAdapter["buildArgs"]>[0], project: string, options: { names?: string[]; force?: boolean; env?: NodeJS.ProcessEnv } = {}): Promise<RunResult> {
-    const result = await this.runner(this.command, this.buildArgs(operation, project, options.names ?? [], options.force ?? false), { cwd: project, env: { ...process.env, ...options.env } });
+  async run(operation: Parameters<SpecsfyAdapter["buildArgs"]>[0], project: string, options: { names?: string[]; force?: boolean; json?: boolean; env?: NodeJS.ProcessEnv } = {}): Promise<RunResult> {
+    const args = this.buildArgs(operation, project, options.names ?? [], options.force ?? false);
+    if (options.json && !args.includes("--json")) args.push("--json");
+    const result = await this.runner(this.command, args, { cwd: project, env: { ...process.env, ...options.env } });
     if (result.exitCode !== 0) throw new Error(`specsfy ${operation} falhou (${result.exitCode}): ${result.stderr.trim()}`);
     return result;
   }
@@ -88,6 +91,7 @@ export class SpecsfyAdapter {
   async setup(project: string, force = false): Promise<RunResult> { return this.run("setup", project, { force }); }
   async update(project: string, force = false): Promise<RunResult> { return this.run("update", project, { force }); }
   async upgrade(project: string): Promise<RunResult> { return this.run("upgrade", project); }
+  async progress(project: string, json = false): Promise<RunResult> { return this.run("progress", project, { json }); }
   async detectOfficial(project: string): Promise<RunResult> { return this.run("skills-detect", project); }
   async officialCatalogNames(project: string): Promise<Set<string>> {
     const output = (await this.run("skills-list", project)).stdout;

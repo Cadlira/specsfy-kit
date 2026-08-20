@@ -14,10 +14,11 @@ export declare class SpecsfyAdapter {
         command?: string;
         runner?: CommandRunner;
     });
-    buildArgs(operation: "version" | "doctor" | "setup" | "update" | "upgrade" | "skills-list" | "skills-detect" | "skills-add", project: string, names?: string[], force?: boolean): string[];
+    buildArgs(operation: "version" | "doctor" | "setup" | "update" | "upgrade" | "progress" | "skills-list" | "skills-detect" | "skills-add", project: string, names?: string[], force?: boolean): string[];
     run(operation: Parameters<SpecsfyAdapter["buildArgs"]>[0], project: string, options?: {
         names?: string[];
         force?: boolean;
+        json?: boolean;
         env?: NodeJS.ProcessEnv;
     }): Promise<RunResult>;
     version(project: string): Promise<string>;
@@ -25,6 +26,7 @@ export declare class SpecsfyAdapter {
     setup(project: string, force?: boolean): Promise<RunResult>;
     update(project: string, force?: boolean): Promise<RunResult>;
     upgrade(project: string): Promise<RunResult>;
+    progress(project: string, json?: boolean): Promise<RunResult>;
     detectOfficial(project: string): Promise<RunResult>;
     officialCatalogNames(project: string): Promise<Set<string>>;
     addOfficial(project: string, names: string[], force?: boolean): Promise<RunResult | undefined>;

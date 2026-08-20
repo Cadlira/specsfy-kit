@@ -8,6 +8,7 @@ import { VERSION } from "../core/version.js";
 import { PROFILE_DEFINITIONS, PROFILES } from "../profiles/definitions.js";
 import { resolveSpecialists, suggestProfiles, validateProfiles } from "../profiles/resolver.js";
 import { detectTestPlan, executeTestPlan, type TestRunnerKind } from "../testing/runner.js";
+import { SpecsfyAdapter } from "../specsfy/adapter.js";
 import { printJson, printRuntime, stackLines } from "./output.js";
 
 interface CommonOptions { project: string; json?: boolean; dryRun?: boolean; force?: boolean; profile?: string[] }
@@ -56,6 +57,12 @@ program.command("status").description("mostra profiles ativos, stack, specialist
 
 program.command("doctor").description("verifica pré-requisitos sem instalar nada").addOption(projectOption()).option("--json", "saída JSON estável").action(async (options: CommonOptions) => {
   const checks = await doctorProject(resolve(options.project)); if (options.json) printJson({ checks, ok: checks.every(({ ok }) => ok) }); else for (const check of checks) console.log(`${check.ok ? "OK" : "FAIL"} ${check.name}: ${check.detail}`); if (checks.some(({ ok }) => !ok)) process.exitCode = 1;
+});
+
+program.command("progress").description("exibe o progresso oficial das specs").addOption(projectOption()).option("--json", "saída JSON oficial estável").action(async (options: CommonOptions) => {
+  const result = await new SpecsfyAdapter().progress(resolve(options.project), options.json ?? false);
+  if (result.stdout) process.stdout.write(result.stdout.endsWith("\n") ? result.stdout : `${result.stdout}\n`);
+  if (result.stderr) process.stderr.write(result.stderr.endsWith("\n") ? result.stderr : `${result.stderr}\n`);
 });
 
 program.command("test")

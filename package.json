@@ -1,6 +1,6 @@
 {
   "name": "specsfy-kit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Profiles, detecção de stack e specialists externos para o Specsfy oficial.",
   "license": "MIT",
   "type": "module",

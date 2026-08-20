@@ -71,13 +71,17 @@ export class SpecsfyAdapter {
             case "setup": return ["setup", "--project", project, ...(force ? ["--force"] : [])];
             case "update": return ["update", "--project", project, ...(force ? ["--force"] : []), "--json"];
             case "upgrade": return ["upgrade", "--json"];
+            case "progress": return ["progress", "--project", project];
             case "skills-list": return ["skills", "list", "--json"];
             case "skills-detect": return ["skills", "detect", "--project", project, "--json"];
             case "skills-add": return ["skills", "add", ...names, "--project", project, ...(force ? ["--force"] : [])];
         }
     }
     async run(operation, project, options = {}) {
-        const result = await this.runner(this.command, this.buildArgs(operation, project, options.names ?? [], options.force ?? false), { cwd: project, env: { ...process.env, ...options.env } });
+        const args = this.buildArgs(operation, project, options.names ?? [], options.force ?? false);
+        if (options.json && !args.includes("--json"))
+            args.push("--json");
+        const result = await this.runner(this.command, args, { cwd: project, env: { ...process.env, ...options.env } });
         if (result.exitCode !== 0)
             throw new Error(`specsfy ${operation} falhou (${result.exitCode}): ${result.stderr.trim()}`);
         return result;
@@ -87,6 +91,7 @@ export class SpecsfyAdapter {
     async setup(project, force = false) { return this.run("setup", project, { force }); }
     async update(project, force = false) { return this.run("update", project, { force }); }
     async upgrade(project) { return this.run("upgrade", project); }
+    async progress(project, json = false) { return this.run("progress", project, { json }); }
     async detectOfficial(project) { return this.run("skills-detect", project); }
     async officialCatalogNames(project) {
         const output = (await this.run("skills-list", project)).stdout;

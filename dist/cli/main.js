@@ -9,6 +9,7 @@ import { VERSION } from "../core/version.js";
 import { PROFILE_DEFINITIONS, PROFILES } from "../profiles/definitions.js";
 import { resolveSpecialists, suggestProfiles, validateProfiles } from "../profiles/resolver.js";
 import { detectTestPlan, executeTestPlan } from "../testing/runner.js";
+import { SpecsfyAdapter } from "../specsfy/adapter.js";
 import { printJson, printRuntime, stackLines } from "./output.js";
 const collect = (value, previous) => [...previous, value];
 const projectOption = () => new Option("--project <path>", "raiz do projeto").default(".");
@@ -103,6 +104,13 @@ program.command("doctor").description("verifica pré-requisitos sem instalar nad
             console.log(`${check.ok ? "OK" : "FAIL"} ${check.name}: ${check.detail}`);
     if (checks.some(({ ok }) => !ok))
         process.exitCode = 1;
+});
+program.command("progress").description("exibe o progresso oficial das specs").addOption(projectOption()).option("--json", "saída JSON oficial estável").action(async (options) => {
+    const result = await new SpecsfyAdapter().progress(resolve(options.project), options.json ?? false);
+    if (result.stdout)
+        process.stdout.write(result.stdout.endsWith("\n") ? result.stdout : `${result.stdout}\n`);
+    if (result.stderr)
+        process.stderr.write(result.stderr.endsWith("\n") ? result.stderr : `${result.stderr}\n`);
 });
 program.command("test")
     .description("detecta e executa os testes nativos da stack")

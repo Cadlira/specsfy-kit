@@ -56,7 +56,7 @@ mecanismo público Agent Skills, em `.agents/skills`, mantendo fingerprints em
 
 Toda execução oficial passa por `src/specsfy/adapter.ts`. O adapter encapsula
 resolução cross-platform (`specsfy.cmd` no Windows ou `SPECSFY_BIN`),
-`--version`, `doctor`, `setup`, `update`, `upgrade`, `skills list`,
+`--version`, `doctor`, `setup`, `update`, `upgrade`, `progress`, `skills list`,
 `skills detect` e `skills add`. Usa `execFile`, argumentos separados e
 `shell: false`.
 

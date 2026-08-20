@@ -120,7 +120,7 @@ Uma versão pinada poderá ser instalada quando existir uma tag:
 
 ```bash
 # Exemplo futuro; requer a tag correspondente no repositório.
-npm install --global github:Cadlira/specsfy-kit#v0.1.0
+npm install --global github:Cadlira/specsfy-kit#v0.1.1
 ```
 
 ## Configuração do zero em um projeto
@@ -202,6 +202,7 @@ npm run build
 | `specsfy-kit sync` | recalcula branch/worktree e reconcilia assets |
 | `specsfy-kit status [--json]` | mostra resolução, instalação e drift |
 | `specsfy-kit doctor [--json]` | verifica pré-requisitos; não instala |
+| `specsfy-kit progress [--json]` | exibe o progresso oficial das specs |
 | `specsfy-kit test` | detecta e executa Maven, Gradle e scripts Node |
 | `specsfy-kit update` | atualiza assets oficiais e do kit |
 | `specsfy-kit profiles list` | lista profiles |
@@ -210,6 +211,20 @@ npm run build
 Operações mutáveis aceitam `--dry-run`; `init`, `sync` e `update` aceitam
 `--force` para assets kit-owned alterados. `init`, `sync` e `update` aceitam
 `--profile` repetível. Use `--json` em automação.
+
+## Progresso das specs
+
+O kit expõe o progresso calculado pelo CLI oficial, sem manter um parser
+paralelo:
+
+```bash
+specsfy-kit progress
+specsfy-kit progress --json
+```
+
+O comando encaminha `--project` ao `specsfy progress` por meio do
+`SpecsfyAdapter`, preserva a saída oficial e não altera arquivos. Os números
+são os mesmos usados pela TUI/dashboard do Specsfy.
 
 ## Testes nativos da stack
 
